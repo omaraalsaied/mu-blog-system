@@ -10,7 +10,7 @@ class PostRepository implements PostRepositoryInterface
     public function all()
     {
         // TODO: Implement all() method.
-        return Post::with('user', 'post_images')->get();
+        return Post::with('user:id,name', 'post_images')->get();
 
     }
 
@@ -23,15 +23,14 @@ class PostRepository implements PostRepositoryInterface
     public function find(int $id)
     {
         // TODO: Implement find() method.
-        return Post::with('post_images', 'user')->findorfail($id);
+        return Post::with('post_images', 'user:id,name')->findorfail($id);
     }
 
     public function update(int $id, array $data)
     {
         // TODO: Implement update() method.
-        $post = findOrFail($id);
-        $post->update($data);
-        return $post;
+        $post = Post::findOrFail($id);
+        return $post->update($data) ;
     }
 
     public function delete(int $id)
@@ -39,5 +38,11 @@ class PostRepository implements PostRepositoryInterface
         // TODO: Implement delete() method.
         $post = Post::findOrFail($id);
         $post->delete();
+    }
+
+    public function user_posts(int $id)
+    {
+        // TODO: Implement user_posts() method.
+        return Post::with('user:id,name', 'post_images')->where('user_id',$id)->get();
     }
 }

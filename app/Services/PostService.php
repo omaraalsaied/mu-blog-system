@@ -36,4 +36,9 @@ class PostService
     {
         return $this->postRepository->delete($id);
     }
+
+    public function user_posts(int $id)
+    {
+        return $this->postRepository->user_posts($id);
+    }
 }

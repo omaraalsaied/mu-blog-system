@@ -16,14 +16,15 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+//Route::get('/', function () {
+//    return Inertia::render('Welcome', [
+//        'canLogin' => Route::has('login'),
+//        'canRegister' => Route::has('register'),
+//        'laravelVersion' => Application::VERSION,
+//        'phpVersion' => PHP_VERSION,
+//    ]);
+
+
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -33,7 +34,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::resource('/posts', \App\Http\Controllers\PostController::class)
+        ->name('index', 'posts.index')
+        ->name('create', 'posts.create')
+        ->name('store', 'posts.store')
+        ->name('edit', 'posts.edit')
+        ->name('update', 'posts.update')
+        ->name('destroy', 'posts.destroy');
+    Route::get('user_posts', [\App\Http\Controllers\PostController::class, 'user_posts'])->name('posts.user_posts');
+    //});
 });
-    Route::resource('/posts', \App\Http\Controllers\PostController::class);
+    Route::get('/', [\App\Http\Controllers\PostController::class, 'index']);
 
 require __DIR__.'/auth.php';
