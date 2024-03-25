@@ -8,14 +8,6 @@ defineProps({
     canRegister: {
         type: Boolean,
     },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
-    phpVersion: {
-        type: String,
-        required: true,
-    },
 
     posts: {
         type: Object,
@@ -54,10 +46,10 @@ defineProps({
             </template>
         </div>
 
-        <div v-for="post in posts">
+        <div v-for="post in posts" :key="post.id">
             <section class="photos">
                 <div v-for="img in post.post_images" :key="img.id" class="card">
-                    <img :src="'/storage/app/'+ img.post_image_path" alt=""> </div>
+                    <img :src="'storage/'+img.post_image_path " alt="fuck"> </div>
             </section>
             <h3 class="px-3 mb-6"> {{ post.title }} </h3> </div>
 

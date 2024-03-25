@@ -49,17 +49,17 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request["user_id"] = Auth::user()->id;
-//        dd($request->files->get('images'));
+    //    dd($request->file('images'));
         $post =  $this->postService->store($request->except('images'));
 
         if($request->files->get('images')) {
             foreach($request->files->get('images') as $img)
             {
                 $img_name = \Carbon\Carbon::now()->toDateString() . "-" . uniqid() . '.'. $img->getClientOriginalExtension();
-                Storage::disk('local')->putFileAs('posts/',$img, $img_name );
+                $path = Storage::disk('public')->putFileAs('images',$img, $img_name );
                 PostImage::create([
                     'post_id' => $post->id,
-                    'post_image_path' => '/posts/'.$img_name,
+                    'post_image_path' => $path,
                     'user_id' => Auth::user()->id,
                 ]);
             }
