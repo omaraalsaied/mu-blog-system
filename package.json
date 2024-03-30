@@ -16,5 +16,9 @@
         "tailwindcss": "^3.2.1",
         "vite": "^5.0.0",
         "vue": "^3.4.0"
+    },
+    "dependencies": {
+        "flowbite-typography": "^1.0.3",
+        "vue-awesome-swiper": "^5.0.1"
     }
 }

@@ -4,8 +4,11 @@ namespace App\Providers;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Repositories\PostImageRepository;
+use App\Repositories\PostImageRepositoryInterface;
 use App\Repositories\PostRepository;
 use App\Repositories\PostRepositoryInterface;
+use App\Services\PostImageService;
 use App\Services\PostService;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -20,6 +23,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PostRepositoryInterface::class, PostRepository::class);
         $this->app->bind(PostService::class, function ($app) {
             return new PostService($app->make(PostRepositoryInterface::class));
+        });
+
+        $this->app->bind(PostImageRepositoryInterface::class, PostImageRepository::class);
+        $this->app->bind(PostImageService::class, function ($app) {
+            return new PostImageService($app->make(PostImageRepositoryInterface::class));
         });
     }
 
