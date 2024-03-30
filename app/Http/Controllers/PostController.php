@@ -6,6 +6,7 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\PostImage;
 use App\Models\User;
+use App\Services\PostImageService;
 use App\Services\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,7 @@ use Inertia\Inertia;
 
 class PostController extends Controller
 {
-    public function __construct(protected PostService $postService)
+    public function __construct(protected PostService $postService, protected PostImageService $postImageService)
     {
     }
 
@@ -49,20 +50,22 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request["user_id"] = Auth::user()->id;
-    //    dd($request->file('images'));
         $post =  $this->postService->store($request->except('images'));
 
-        if($request->files->get('images')) {
-            foreach($request->files->get('images') as $img)
-            {
-                $img_name = \Carbon\Carbon::now()->toDateString() . "-" . uniqid() . '.'. $img->getClientOriginalExtension();
-                $path = Storage::disk('public')->putFileAs('images',$img, $img_name );
-                PostImage::create([
-                    'post_id' => $post->id,
-                    'post_image_path' => $path,
-                    'user_id' => Auth::user()->id,
-                ]);
-            }
+        if($request->files) {
+            // foreach($request->files->get('images') as $img)
+            // {
+            //     $img_name = \Carbon\Carbon::now()->toDateString() . "-" . uniqid() . '.'. $img->getClientOriginalExtension();
+            //     $path = Storage::disk('public')->putFileAs('images',$img, $img_name );
+
+            //     $post->post_images()->create([
+            //         'post_id' => $post->id,
+            //         'post_image_path' => $path,
+            //     ]);
+            // }
+
+
+            $this->postImageService->upload($request->file('images'), $post);
         }
         return redirect()->route('posts.index');
 
@@ -73,7 +76,9 @@ class PostController extends Controller
      */
     public function show(int $id)
     {
-        return $this->postService->find($id);
+        $post = $this->postService->find($id);
+
+        return Inertia::render('Posts/Show', ['post' => $post ,'canLogin' => Route::has('login'), 'canRegister' => Route::has('register')]);
     }
 
     /**
@@ -88,7 +93,7 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePostRequest $request, int $id)
+    public function update(Request $request, int $id)
     {
         $this->postService->update($id, $request->only('title', 'body'));
         return redirect()->route('posts.index');
@@ -101,5 +106,10 @@ class PostController extends Controller
     public function destroy(int $id)
     {
         return $this->postService->delete($id);
+    }
+
+    public function deleteImage(Request $request)
+    {
+        return $this->postImageService->delete($request->id);
     }
 }
