@@ -1,5 +1,7 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+
 
 defineProps({
     canLogin: {
@@ -20,9 +22,12 @@ defineProps({
     <Head title="Blog" />
 
     <div
-        class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100  selection:bg-red-500 selection:text-white"
+        class="relative sm:grid sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100  selection:bg-red-500 selection:text-white"
     >
         <div v-if="canLogin" class="sm:fixed sm:top-0 sm:right-0 p-6 text-end">
+
+
+
             <Link
                 v-if="$page.props.auth.user"
                 :href="route('dashboard')"
@@ -44,25 +49,44 @@ defineProps({
                     >Register</Link
                 >
             </template>
+
+
         </div>
 
-        <div v-for="post in posts" :key="post.id">
-            <section class="photos">
-                <div v-for="img in post.post_images" :key="img.id" class="card">
-                    <img :src="'storage/'+img.post_image_path " alt="fuck"> </div>
-            </section>
-            <h3 class="px-3 mb-6"> {{ post.title }} </h3> </div>
+
+        <div class="mt-auto p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-10">
+            <div v-for="post in posts" :key="post.id" class="rounded overflow-hidden shadow-lg bg-white mt-auto mb-auto">
+                <a href="#">
+                    <div  class="w-full">
+                        <img v-if="post.post_images.length > 0 && post.post_images[0].post_image_path"
+                         :src="'storage/'+post.post_images[0].post_image_path"
+                          alt="post image"
+                           class=" appearance-none w-20 sm:w-64 lg:w-48 mt-auto">
+
+                    </div>
+                </a>
+                <div class="p-5">
+                <Link :href="route('posts.show', post.id)">
+                    <h5 class="font-bold text-xl mb-2">{{ post.title }}</h5>
+                            </Link>
+                <p class="text-gray-700 text-base mb-5" v-if="post.body.length > 120">{{ post.body.substring(0,120) + "..." }}</p>
+                <p class="text-gray-700 text-base mb-5" v-else>{{ post.body }}</p>
+
+                <h5 class="font text-ls mb-2"> Written By: <h5 class="font-bold text-ls mb-2"> {{ post.user.name }}</h5> </h5>
+
+                <div class="px-6 pt-4 pb-2 text-left  mt">
+                    <Link :href="route('posts.show', post.id)">
+                                <PrimaryButton class="bg-blue-500 p-2">Read More</PrimaryButton>
+                            </Link>
+                </div>
+
+                </div>
+            </div>
+    </div>
 
     </div>
 </template>
 
 <style>
-.bg-dots-darker {
-    background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(0,0,0,0.07)'/%3E%3C/svg%3E");
-}
-@media (prefers-color-scheme: dark) {
-    .dark\:bg-dots-lighter {
-        background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(255,255,255,0.07)'/%3E%3C/svg%3E");
-    }
-}
+
 </style>

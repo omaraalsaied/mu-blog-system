@@ -4,16 +4,10 @@ import TextInput from "@/Components/TextInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import InputError from "@/Components/InputError.vue";
+import FileInput from "@/Components/FileInput.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import { ref } from 'vue';
-
-
-const props = defineProps({
-    posts: {
-        type: Object,
-        default: () => ({}),
-    },
-});
+import axios from 'axios';
 
 const form = useForm({
     title: "",
@@ -25,20 +19,25 @@ const submit = () => {
     form.post(route("posts.store"));
 };
 
-const images = ref([]);
-
-const onChange = (event) => {
+const addPhotos = (event) => {
     const files = event.target.files;
-
-    images.value = Array.from(files);
-
-    form.images = [];
-
-    images.value.forEach((image) => {
-        form.images.push(image);
-    });
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        reader.onload = () => {
+            form.images.push({
+                id: null,
+                url: reader.result,
+                file: file
+            });
+        };
+        reader.readAsDataURL(file);
+    }
 };
 
+const deleteImage = async (index) => {
+    form.images.splice(index, 1);
+};
 </script>
 
 <template>
@@ -93,19 +92,25 @@ const onChange = (event) => {
                                     v-if="form.errors.body"
                                     class="text-sm text-red-600"
                                 >
-
-
                                     {{ form.errors.body }}
                                 </div>
                             </div>
-                            <div class="my-6">
-                                <label for="images" class="block mb-2 text-sm font-medium text-gray-900">Images</label>
-                                <input type="file" class="form-control" multiple @change="onChange">
 
-                                <div class="image-preview mt-4" v-if="images.length > 0">
-                                    <div v-for="(image, index) in images" :key="index">
-                                        <img :src="URL.createObjectURL(image)" :alt="image.name" class="w-20 h-20 rounded-md object-cover">
-                                    </div>
+                            <div>
+                                <div class="my-6">
+                                    <label for="images" class="block mb-2 text-sm font-medium text-gray-900">Images</label>
+                                    <input type="file" class="form-control" multiple @change="addPhotos">
+                                </div>
+                            </div>
+
+                            <div v-if="form.images.length > 0" class="text-sm text-red-600">
+                                <div v-for="(img, index) in form.images" :key="index" class="relative inline-block mr-2 mb-2">
+                                    <button @click="deleteImage(index)" class="absolute top-0 right-0 text-red-600 bg-white p-1 rounded-full">
+                                        <svg class="w-4 h-4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                    <img :src="img.url" class="w-32 h-auto rounded-lg" alt="Image"/>
                                 </div>
                             </div>
 

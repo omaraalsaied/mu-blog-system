@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostImageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -35,15 +36,16 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('/posts', \App\Http\Controllers\PostController::class)
-        ->name('index', 'posts.index')
+        ->name('show', 'posts.show')
         ->name('create', 'posts.create')
         ->name('store', 'posts.store')
         ->name('edit', 'posts.edit')
         ->name('update', 'posts.update')
         ->name('destroy', 'posts.destroy');
     Route::get('user_posts', [\App\Http\Controllers\PostController::class, 'user_posts'])->name('posts.user_posts');
-    //});
+    Route::delete('/post_image/{id}', [\App\Http\Controllers\PostController::class, 'deleteImage']);
+    Route::post('/upload-photos', [PostImageController::class, 'upload']);
 });
-    Route::get('/', [\App\Http\Controllers\PostController::class, 'index']);
+    Route::get('/', [\App\Http\Controllers\PostController::class, 'index'])->name('index');
 
 require __DIR__.'/auth.php';

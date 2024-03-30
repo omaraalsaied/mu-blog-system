@@ -21,6 +21,11 @@ class Post extends Model
         'user_id'
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime: Y-m-d h:i',
+    ];
+
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -31,6 +36,7 @@ class Post extends Model
         return $this->hasMany(PostImage::class);
     }
 
+    // to cascade deleting post_images on post deletion
     public static function boot ()
     {
         parent::boot();
