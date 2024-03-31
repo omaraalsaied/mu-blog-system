@@ -15,13 +15,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(2)->create();
-        Post::factory(2)->create();
-         PostImage::factory(2)->create();
+        // User::factory(2)->create();
+        // Post::factory(2)->create();
+        // PostImage::factory(2)->create();
 
-//         \App\Models\User::factory()->create([
-//             'name' => 'Test User',
-//             'email' => 'test@example.com',
-//         ]);
+
+        \App\Models\Comment::factory()->create([
+            'body' => 'Test Comment',
+            'user_id' => 3,
+            'post_id' => 37,
+        ]);
     }
 }

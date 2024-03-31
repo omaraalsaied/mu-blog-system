@@ -7,7 +7,6 @@ import InputError from "@/Components/InputError.vue";
 import FileInput from "@/Components/FileInput.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import { ref } from 'vue';
-import axios from 'axios';
 
 const form = useForm({
     title: "",

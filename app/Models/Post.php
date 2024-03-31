@@ -36,6 +36,11 @@ class Post extends Model
         return $this->hasMany(PostImage::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     // to cascade deleting post_images on post deletion
     public static function boot ()
     {
