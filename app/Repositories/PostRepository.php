@@ -23,7 +23,11 @@ class PostRepository implements PostRepositoryInterface
     public function find(int $id)
     {
         // TODO: Implement find() method.
-        return Post::with('post_images', 'user:id,name')->findorfail($id);
+        return Post::with([
+            'post_images',
+            'user:id,name',
+            'comments.user'
+            ])->findorfail($id);
     }
 
     public function update(int $id, array $data)
@@ -43,6 +47,6 @@ class PostRepository implements PostRepositoryInterface
     public function user_posts(int $id)
     {
         // TODO: Implement user_posts() method.
-        return Post::with('user:id,name', 'post_images')->where('user_id',$id)->get();
+        return Post::with('user:id,name', 'post_images', 'comments')->where('user_id',$id)->get();
     }
 }

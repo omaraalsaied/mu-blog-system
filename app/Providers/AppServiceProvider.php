@@ -4,10 +4,13 @@ namespace App\Providers;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Repositories\CommentRepositoryInterface;
+use App\Repositories\CommentRepositroy;
 use App\Repositories\PostImageRepository;
 use App\Repositories\PostImageRepositoryInterface;
 use App\Repositories\PostRepository;
 use App\Repositories\PostRepositoryInterface;
+use App\Services\CommentService;
 use App\Services\PostImageService;
 use App\Services\PostService;
 use Illuminate\Support\Facades\Gate;
@@ -29,6 +32,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PostImageService::class, function ($app) {
             return new PostImageService($app->make(PostImageRepositoryInterface::class));
         });
+
+        $this->app->bind(CommentRepositoryInterface::class, CommentRepositroy::class);
+        $this->app->bind(CommentService::class, function ($app){
+            return new CommentService($app->make(CommentRepositoryInterface::class));
+        });
     }
 
     /**
@@ -36,8 +44,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::define('update-post', function (User $user, Post $post) {
-            return $user->id === $post->user_id;
-        });
+        // Gate::define('update-post', function (User $user, Post $post) {
+        //     return $user->id === $post->user_id;
+        // });
     }
 }
