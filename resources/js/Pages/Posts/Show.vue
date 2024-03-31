@@ -218,8 +218,8 @@ function closeDropdownOnClickOutside(event) {
                               </div>
                               <div v-if="($page.props.auth.user) && (($page.props.auth.user.id === post.user_id) || ($page.props.auth.user.id === comment.user_id))" class="relative">
                                  <button @click="toggleDropdown(index)" class="text-gray-400 hover:text-gray-700 dark:text-gray-200 dark:hover:text-gray-100 focus:outline-none">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                    <svg width="16px" height="16px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-three-dots">
+                                        <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
                                     </svg>
                                  </button>
                                  <div v-if="showDropdown[index]" class="absolute bottom-0 right-0 mt-2 w-48 bg-white rounded-md shadow-lg dark:bg-gray-800">
