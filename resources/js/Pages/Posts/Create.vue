@@ -53,7 +53,7 @@ const deleteImage = async (index) => {
             <div class="mx-auto max-w-7xl">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
-                        <form @submit.prevent="submit">
+                        <form @submit.prevent="submit" enctype="multipart/form-data">
                             <div>
                                 <InputLabel for="title" value="Title" />
 
@@ -98,7 +98,7 @@ const deleteImage = async (index) => {
                             <div>
                                 <div class="my-6">
                                     <label for="images" class="block mb-2 text-sm font-medium text-gray-900">Images</label>
-                                    <input type="file" class="form-control" multiple @change="addPhotos">
+                                    <input type="file" class="form-control" accept="image/png, image/jpeg" multiple @change="addPhotos">
                                 </div>
                             </div>
 
@@ -112,6 +112,12 @@ const deleteImage = async (index) => {
                                     <img :src="img.url" class="w-32 h-auto rounded-lg" alt="Image"/>
                                 </div>
                             </div>
+                            <div
+                                    v-if="form.errors.images"
+                                    class="text-sm text-red-600"
+                                >
+                                    {{ form.errors.images }}
+                                </div>
 
                             <PrimaryButton
                                 type="submit"
