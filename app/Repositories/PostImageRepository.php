@@ -18,6 +18,7 @@ class PostImageRepository implements PostImageRepositoryInterface {
         {
             foreach($img as $file)
             {
+                
                 $file_name = \Carbon\Carbon::now()->toDateString() . "-" . uniqid() . '.'. $file->getClientOriginalExtension();
                 $path = Storage::disk('public')->putFileAs('images',$file, $file_name );
 

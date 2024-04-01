@@ -47,22 +47,17 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
         $request["user_id"] = Auth::user()->id;
         $post =  $this->postService->store($request->except('images'));
 
         if($request->files) {
-            // foreach($request->files->get('images') as $img)
-            // {
-            //     $img_name = \Carbon\Carbon::now()->toDateString() . "-" . uniqid() . '.'. $img->getClientOriginalExtension();
-            //     $path = Storage::disk('public')->putFileAs('images',$img, $img_name );
 
-            //     $post->post_images()->create([
-            //         'post_id' => $post->id,
-            //         'post_image_path' => $path,
-            //     ]);
-            // }
+            foreach($request->file('images') as $img)
+            {
+
+            }
 
 
             $this->postImageService->upload($request->file('images'), $post);
@@ -91,7 +86,7 @@ class PostController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage
      */
     public function update(Request $request, int $id)
     {
