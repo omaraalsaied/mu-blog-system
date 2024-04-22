@@ -2,10 +2,9 @@
    import { Head, Link,useForm } from '@inertiajs/vue3';
    import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
    import 'swiper/swiper-bundle.css';
-   import { ref } from 'Vue';
    import TextInput from "@/Components/TextInput.vue";
    import PrimaryButton from "@/Components/PrimaryButton.vue";
-   import { onMounted } from 'vue';
+   import { onMounted, ref } from 'vue';
    import axios from 'axios';
 
    const { post, canLogin, canRegister } = defineProps({
